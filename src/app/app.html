@@ -1,29 +1,30 @@
-<main class="main">
+<main class="flex flex-col gap-4">
 
-  <div class="wrap">
+  <div class="flex flex-col gap-1">
     <label>Battery (kWh)</label>
     <input class="range" type="range" min="0" max="20" step="1" [(ngModel)]="scenario.batteryKWh" />
     <div>{{ scenario.batteryKWh() }}</div>
   </div>
-  <div class="row">
+
+  <div class="flex items-center gap-2">
     <label>Self-consumption (no batt)</label>
     <input class="range" type="range" min="0.20" max="0.45" step="0.01"
       [(ngModel)]="scenario.selfConsumptionNoBattery" />
     <div>{{ scenario.selfConsumptionNoBattery() | number:'1.2-2' }}</div>
   </div>
 
-  <div class="row" style="justify-content:flex-end">
-    <button class="btn" (click)="addScenario()">Add scenario</button>
+  <div class="flex justify-end">
+    <button class="btn px-4 py-2 bg-blue-600 text-white rounded" (click)="addScenario()">Add scenario</button>
   </div>
 
-  <div class="card" style="margin-top:16px">
-    <div class="row" style="margin-bottom:8px">
-      <h3 style="margin:0">Your Scenarios</h3>
-      <div class="muted small">stored locally • works offline</div>
+  <div class="card mt-4 flex flex-col">
+    <div class="flex items-center mb-2 gap-2">
+      <h3 class="m-0">Your Scenarios</h3>
+      <div class="text-gray-500 text-sm">stored locally • works offline</div>
     </div>
 
     @if (scenarios().length >0) {
-    <table>
+    <table class="w-full">
       <thead>
         <tr>
           <th>Scenario</th>
@@ -42,25 +43,25 @@
 
       <tbody>
         @for (s of calculatedScenarios(); track s; let i = $index ) {
-        <tr>
-          <td style="text-align:left">
+        <tr class="flex items-center">
+          <td class="text-left flex-2">
             <div>{{ s.scenario.name }}</div>
-            <div class="small muted">Load: {{ s.scenario.annualLoadKWh | number:'1.0-0' }} kWh • Yield: {{
+            <div class="text-sm text-gray-500">Load: {{ s.scenario.annualLoadKWh | number:'1.0-0' }} kWh • Yield: {{
               s.scenario.yieldKWhPerKwp |
               number:'1.0-0' }}</div>
           </td>
-          <td>{{ s.scenario.pvSizeKwp }}</td>
-          <td>{{ s.scenario.batteryKWh }}</td>
-          <td>{{ s.result.productionKWh | number:'1.0-0' }}</td>
-          <td>{{ s.result.selfUsedEffectiveKWh | number:'1.0-0' }}</td>
-          <td>{{ s.result.exportKWh | number:'1.0-0' }}</td>
-          <td>{{ s.result.gridImportKWh | number:'1.0-0' }}</td>
-          <td>{{ s.result.year1SavingsEur | currency:'EUR' }}</td>
-          <td>{{ s.result.capexEur | currency:'EUR' }}</td>
-          <td>
+          <td class="flex-1">{{ s.scenario.pvSizeKwp }}</td>
+          <td class="flex-1">{{ s.scenario.batteryKWh }}</td>
+          <td class="flex-1">{{ s.result.productionKWh | number:'1.0-0' }}</td>
+          <td class="flex-1">{{ s.result.selfUsedEffectiveKWh | number:'1.0-0' }}</td>
+          <td class="flex-1">{{ s.result.exportKWh | number:'1.0-0' }}</td>
+          <td class="flex-1">{{ s.result.gridImportKWh | number:'1.0-0' }}</td>
+          <td class="flex-1">{{ s.result.year1SavingsEur | currency:'EUR' }}</td>
+          <td class="flex-1">{{ s.result.capexEur | currency:'EUR' }}</td>
+          <td class="flex-1">
             <span class="pill">{{ s.result.simplePaybackYears | number:'1.1-1' }} yrs</span>
           </td>
-          <td><button class="btn" (click)="removeAt(i)" style="padding:6px 10px">Delete</button></td>
+          <td class="flex-1"><button class="btn px-2 py-1 bg-red-600 text-white rounded" (click)="removeAt(i)">Delete</button></td>
         </tr>
         }
       </tbody>
@@ -68,12 +69,11 @@
     </table>
     }
     @else{
-    <div class="muted">No scenarios yet. Add one from the form above.</div>
+    <div class="text-gray-500">No scenarios yet. Add one from the form above.</div>
     }
   </div>
 
-
-  <div class="muted small" style="margin-top:8px">
+  <div class="text-gray-500 text-sm mt-2">
     Tip: For Munich, start with yield ≈ 1014 kWh/kWp·yr, grid price 0.38 €/kWh, feed-in 0.0786 €/kWh.
   </div>
 
