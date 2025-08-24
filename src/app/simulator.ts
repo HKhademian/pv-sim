@@ -12,21 +12,11 @@ import {
   tEuro,
 } from './models';
 
-const DEFAULT_TARIFF: tTariff = {
-  retailEurPerKWh: <tEuroPerKWh>(0.38),
-  feedInEurPerKWh: <tEuroPerKWh>(0.0786),
-};
-const DEFAULT_PV_COST_PER_KWP = <tEuroPerKWh>(1500);
-const DEFAULT_BATTERY_COST_PER_KWH = <tEuroPerKWh>(700);
-
 
 @Injectable({
   providedIn: 'root'
 })
-export class Simulator {
-  tariff = signal<tTariff>(DEFAULT_TARIFF);
-  pvCostPerKwp = signal(DEFAULT_PV_COST_PER_KWP);
-  batteryCostPerKWh = signal(DEFAULT_BATTERY_COST_PER_KWH);
+export class SimulatorService {
 
   calculate(input: tScenarioInput): tScenarioResult {
     const productionKWh = <tKWh>(input.pvSizeKwp * input.yieldKWhPerKwp);

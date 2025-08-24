@@ -13,10 +13,9 @@ const DEFAULT_INPUT: tScenarioInput[] = [];
 @Injectable({
   providedIn: 'root'
 })
-export class Storage {
-  scenarios = signal<tScenarioInput[]>(this.load());
+export class StorageService {
 
-  private load(): tScenarioInput[] {
+  load(): tScenarioInput[] {
     try {
       const raw = localStorage.getItem(KEY);
       if (raw) return JSON.parse(raw);
@@ -26,11 +25,9 @@ export class Storage {
 
   clean() {
     localStorage.removeItem(KEY);
-    this.scenarios.set(DEFAULT_INPUT);
   }
 
   save(list: tScenarioInput[]) {
     localStorage.setItem(KEY, JSON.stringify(list));
-    this.scenarios.set(list);
   }
 }
