@@ -21,7 +21,9 @@
       <h3 style="margin:0">Your Scenarios</h3>
       <div class="muted small">stored locally • works offline</div>
     </div>
-    <table *ngIf="scenarios().length > 0">
+
+    @if (scenarios().length >0) {
+    <table>
       <thead>
         <tr>
           <th>Scenario</th>
@@ -37,29 +39,37 @@
           <th></th>
         </tr>
       </thead>
+
       <tbody>
-        <tr *ngFor="let s of scenarios(); let i = index">
+        @for (s of calculatedScenarios(); track s; let i = $index ) {
+        <tr>
           <td style="text-align:left">
-            <div>{{ s.name }}</div>
-            <div class="small muted">Load: {{ s.annualLoadKWh | number:'1.0-0' }} kWh • Yield: {{ s.yieldKWhPerKwp |
+            <div>{{ s.scenario.name }}</div>
+            <div class="small muted">Load: {{ s.scenario.annualLoadKWh | number:'1.0-0' }} kWh • Yield: {{
+              s.scenario.yieldKWhPerKwp |
               number:'1.0-0' }}</div>
           </td>
-          <td>{{ s.pvSizeKwp }}</td>
-          <td>{{ s.batteryKWh }}</td>
-          <td>{{ result(s).productionKWh | number:'1.0-0' }}</td>
-          <td>{{ result(s).selfUsedEffectiveKWh | number:'1.0-0' }}</td>
-          <td>{{ result(s).exportKWh | number:'1.0-0' }}</td>
-          <td>{{ result(s).gridImportKWh | number:'1.0-0' }}</td>
-          <td>{{ result(s).year1SavingsEur | currency:'EUR' }}</td>
-          <td>{{ result(s).capexEur | currency:'EUR' }}</td>
+          <td>{{ s.scenario.pvSizeKwp }}</td>
+          <td>{{ s.scenario.batteryKWh }}</td>
+          <td>{{ s.result.productionKWh | number:'1.0-0' }}</td>
+          <td>{{ s.result.selfUsedEffectiveKWh | number:'1.0-0' }}</td>
+          <td>{{ s.result.exportKWh | number:'1.0-0' }}</td>
+          <td>{{ s.result.gridImportKWh | number:'1.0-0' }}</td>
+          <td>{{ s.result.year1SavingsEur | currency:'EUR' }}</td>
+          <td>{{ s.result.capexEur | currency:'EUR' }}</td>
           <td>
-            <span class="pill">{{ result(s).simplePaybackYears | number:'1.1-1' }} yrs</span>
+            <span class="pill">{{ s.result.simplePaybackYears | number:'1.1-1' }} yrs</span>
           </td>
           <td><button class="btn" (click)="removeAt(i)" style="padding:6px 10px">Delete</button></td>
         </tr>
+        }
       </tbody>
+
     </table>
-    <div *ngIf="scenarios().length === 0" class="muted">No scenarios yet. Add one from the form above.</div>
+    }
+    @else{
+    <div class="muted">No scenarios yet. Add one from the form above.</div>
+    }
   </div>
 
 
