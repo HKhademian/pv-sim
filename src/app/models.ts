@@ -1,13 +1,22 @@
-const _PER_ = Symbol('per');
+declare const _PER_: unique symbol;
 
+/** currency, price / revenue / cost */
 export type tEuro = number & { readonly '': unique symbol; };
+/** energy , kilowatt-hour */
 export type tKWh = number & { readonly '': unique symbol; };
+/** power , kilowatt-peak */
 export type tKwp = number & { readonly '': unique symbol; };
 
 export type tRate = number & { readonly '': unique symbol; };
 
-export type tEuroPerKWh = tEuro & { readonly _PER_: tKWh; };
-export type tKWhPerKwp = tEuro & { readonly _PER_: tKwp; };
+/** price per energy */
+export type tEuroPerKWh = tEuro & { readonly [_PER_]: tKWh; };
+
+/** price per power */
+export type tEuroPerKwp = tEuro & { readonly [_PER_]: tKwp; };
+
+/** conversion rate */
+export type tKWhPerKwp = tKWh & { readonly [_PER_]: tKwp; };
 
 
 export interface tTariff {
