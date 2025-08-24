@@ -41,7 +41,7 @@ export class App {
   batteryCostPerKWh = signal(DEFAULT_BATTERY_COST_PER_KWH);
 
   readonly scenario = {
-    name: signal('Home+EV 7kWp + 5kWh'),
+    name: signal(''),
     annualLoadKWh: signal(<tKWh>(5300)),
     pvSizeKwp: signal(<tKwp>(7)),
     batteryKWh: signal(<tKWh>(5)),
@@ -60,7 +60,7 @@ export class App {
 
   addScenario() {
     const s: tScenarioInput = {
-      name: this.scenario.name(),
+      name: this.scenario.name() || `Home ${this.scenario.pvSizeKwp()}kWp + ${this.scenario.batteryKWh()}kWh`,
       annualLoadKWh: this.scenario.annualLoadKWh(),
       pvSizeKwp: this.scenario.pvSizeKwp(),
       batteryKWh: this.scenario.batteryKWh(),
