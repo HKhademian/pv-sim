@@ -1,18 +1,18 @@
-import { Component, signal } from '@angular/core';
+import { Component, computed, signal } from '@angular/core';
 import { CurrencyPipe, DecimalPipe } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { SimulatorService } from './simulator';
 import { StorageService } from './storage';
 import type {
-  tTariff, tEuro, tKWhPerKwp, tRate, tEuroPerKWh, tScenarioInput, tKWh, tKwp,
+  tTariff, tEuroPerKwp, tKWhPerKwp, tRate, tEuroPerKWh, tScenarioInput, tKWh, tKwp,
 } from './models';
 
 const DEFAULT_TARIFF: tTariff = {
   retailEurPerKWh: <tEuroPerKWh>(0.38),
   feedInEurPerKWh: <tEuroPerKWh>(0.0786),
 };
-const DEFAULT_PV_COST_PER_KWP = <tEuroPerKWh>(1500);
+const DEFAULT_PV_COST_PER_KWP = <tEuroPerKwp>(1500);
 const DEFAULT_BATTERY_COST_PER_KWH = <tEuroPerKWh>(700);
 
 @Component({
@@ -30,6 +30,11 @@ export class App {
   protected readonly title = signal('pv-sim');
 
   scenarios = signal<tScenarioInput[]>([]);
+
+  calculatedScenarios = computed(() => this.scenarios().map(s => ({
+    scenario: s,
+    result: this.simulator.calculate(s, this.tariff(), this.pvCostPerKwp(), this.batteryCostPerKWh()),
+  })));
 
   tariff = signal<tTariff>(DEFAULT_TARIFF);
   pvCostPerKwp = signal(DEFAULT_PV_COST_PER_KWP);
@@ -77,6 +82,6 @@ export class App {
   }
 
   result(s: tScenarioInput) {
-    return this.simulator.calculate(s);
+    return this.simulator.calculate(s, this.tariff(), this.pvCostPerKwp(), this.batteryCostPerKWh());
   }
 }
