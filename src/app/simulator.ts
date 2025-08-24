@@ -1,24 +1,19 @@
+import { Injectable } from '@angular/core';
 import {
-  Injectable,
-  signal,
-} from '@angular/core';
-import {
-  type tTariff,
-  type tScenarioInput,
-  type tScenarioResult,
-  type tEuroPerKWh,
-  type tKWh,
-  tRate,
-  tEuro,
+  tTariff, tScenarioInput, tScenarioResult, tEuroPerKWh, tKWh, tRate, tEuro, tEuroPerKwp,
 } from './models';
-
 
 @Injectable({
   providedIn: 'root'
 })
 export class SimulatorService {
 
-  calculate(input: tScenarioInput): tScenarioResult {
+  calculate(
+    input: tScenarioInput,
+    tariff: tTariff,
+    pvCostPerKwp: tEuroPerKwp,
+    batteryCostPerKWh: tEuroPerKWh,
+  ): tScenarioResult {
     const productionKWh = <tKWh>(input.pvSizeKwp * input.yieldKWhPerKwp);
 
     let selfConsumptionShareNoBattery: tRate = input.selfConsumptionNoBattery;
@@ -44,12 +39,12 @@ export class SimulatorService {
     const exportKWh = <tKWh>(Math.max(0, productionKWh - selfUsedEffectiveKWh));
     const gridImportKWh = <tKWh>(Math.max(0, input.annualLoadKWh - selfUsedEffectiveKWh));
 
-    const { retailEurPerKWh, feedInEurPerKWh } = this.tariff();
+    const { retailEurPerKWh, feedInEurPerKWh } = tariff;
     const avoided = <tEuro>(selfUsedEffectiveKWh * retailEurPerKWh);
     const exportRevenue = <tEuro>(exportKWh * feedInEurPerKWh);
     const year1SavingsEur = <tEuro>(avoided + exportRevenue);
 
-    const capexEur = <tEuro>(input.pvSizeKwp * this.pvCostPerKwp() + input.batteryKWh * this.batteryCostPerKWh());
+    const capexEur = <tEuro>(input.pvSizeKwp * pvCostPerKwp + input.batteryKWh * batteryCostPerKWh);
     const simplePaybackYears = year1SavingsEur > 0 ? capexEur / year1SavingsEur : Infinity;
 
     return {
