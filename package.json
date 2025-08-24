@@ -1,17 +1,19 @@
 {
   "name": "pv-sim",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "serve:ssr:pv-sim": "node dist/pv-sim/server/server.mjs"
+    "serve:ssr:pv-sim": "node dist/pv-sim/server/server.mjs",
+    "serve:prod": "npx http-server dist/pv-battery-sim/browser -p 4200 -c-1"
   },
   "prettier": {
-    "printWidth": 100,
-    "singleQuote": true,
+    "printWidth": 180,
+    "endOfLine": "lf",
+    "singleQuote": false,
     "overrides": [
       {
         "files": "*.html",
@@ -23,13 +25,16 @@
   },
   "private": true,
   "dependencies": {
+    "@angular/animations": "^20.2.1",
     "@angular/common": "^20.2.0",
     "@angular/compiler": "^20.2.0",
     "@angular/core": "^20.2.0",
     "@angular/forms": "^20.2.0",
     "@angular/platform-browser": "^20.2.0",
+    "@angular/platform-browser-dynamic": "^20.2.1",
     "@angular/platform-server": "^20.2.0",
     "@angular/router": "^20.2.0",
+    "@angular/service-worker": "^20.2.1",
     "@angular/ssr": "^20.2.0",
     "express": "^5.1.0",
     "rxjs": "~7.8.0",
